@@ -1,0 +1,27 @@
+{
+  "type": "record",
+  "name": "PeopleEvent",
+  "namespace": "br.com.udemy.springkafka.avro",
+  "fields": [
+    {
+      "name": "id",
+      "type": "string"
+    },
+    {
+      "name": "name",
+      "type": "string"
+    },
+    {
+      "name": "cpf",
+      "type": "string"
+    },
+    {
+      "name": "cep",
+      "type": "string"
+    },
+    {
+      "name": "investmentDollar",
+      "type": "double"
+    }
+  ]
+}
