@@ -1,5 +1,8 @@
 topic:
   name: people
+  dltName: people-dlt
+  maxAttempts: 3
+  interval: 1000
 
 spring:
   application:

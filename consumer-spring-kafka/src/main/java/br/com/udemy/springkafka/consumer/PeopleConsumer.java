@@ -2,6 +2,9 @@ package br.com.udemy.springkafka.consumer;
 
 import br.com.udemy.springkafka.avro.PeopleEvent;
 import br.com.udemy.springkafka.domain.PeopleEntity;
+import br.com.udemy.springkafka.exception.AddressNotFoundException;
+import br.com.udemy.springkafka.exception.CustomerNotFoundException;
+import br.com.udemy.springkafka.exception.DollarRateException;
 import br.com.udemy.springkafka.repository.PeopleEventRepository;
 import br.com.udemy.springkafka.services.CustomerEnrichmentService;
 import br.com.udemy.springkafka.services.CustomerSummaryService;
@@ -41,32 +44,34 @@ public class PeopleConsumer {
 
         peopleEventRepository.save(peopleEntity);
 
+        var customerSummary = customerEnrichmentService.process(people);
+
+
+        customerSummaryService.save(customerSummary);
+
         log.info(
                 "Customer summary generated for CPF {}",
                 people.getCpf()
         );
 
-        var customerSummary = customerEnrichmentService.process(people);
-
-        customerSummaryService.save(customerSummary);
+        ack.acknowledge();
 
         log.info(
                 "Customer summary saved successfully"
         );
 
-        ack.acknowledge();
     }
 
     private static PeopleEntity getPeopleEntity(ConsumerRecord<String, PeopleEvent> record, PeopleEvent people) {
         return PeopleEntity.builder()
-                    .name(people.getName().toString())
-                    .cpf(people.getCpf().toString())
-                    .investmentDollar(BigDecimal.valueOf(people.getInvestmentDollar()))
-                    .cep(people.getCep().toString())
-                    .topic(record.topic())
-                    .kafkaOffset(record.offset())
-                    .receivedAt(LocalDateTime.now())
-                        .build();
+                .name(people.getName().toString())
+                .cpf(people.getCpf().toString())
+                .investmentDollar(BigDecimal.valueOf(people.getInvestmentDollar()))
+                .cep(people.getCep().toString())
+                .topic(record.topic())
+                .kafkaOffset(record.offset())
+                .receivedAt(LocalDateTime.now())
+                .build();
     }
 /*
     @KafkaHandler(isDefault = true)

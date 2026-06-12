@@ -1,6 +1,7 @@
 package br.com.udemy.springkafka.services;
 
 import br.com.udemy.springkafka.domain.CustomerProfile;
+import br.com.udemy.springkafka.exception.CustomerNotFoundException;
 import br.com.udemy.springkafka.repository.CustomerProfileRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,6 @@ public class CustomerProfileService {
         return customerProfileRepository
                 .findByCpf(cpf)
                 .orElseThrow(
-                        () -> new RuntimeException("Customer not found: " + cpf));
+                        () -> new CustomerNotFoundException(cpf));
     }
 }

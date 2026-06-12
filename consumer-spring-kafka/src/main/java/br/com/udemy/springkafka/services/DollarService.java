@@ -2,6 +2,7 @@ package br.com.udemy.springkafka.services;
 
 import br.com.udemy.springkafka.clients.DollarClient;
 import br.com.udemy.springkafka.clients.ViaCelClient;
+import br.com.udemy.springkafka.exception.DollarRateException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -16,6 +17,12 @@ public class DollarService {
     }
 
     BigDecimal getCurrentDollarRate() {
-        return dollarClient.getDollarRate();
+
+        try {
+
+            return dollarClient.getDollarRate();
+        } catch (Exception e) {
+            throw  new DollarRateException(e.getMessage());
+        }
     }
 }
